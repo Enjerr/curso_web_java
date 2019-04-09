@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+	<head>
+		<title> Intro JS </title>
+		<meta charset="utf-8"/>
+	</head>
+	<body>
+		<header>
+			<h1>7_intro_formaci&oacute;n_JS.html</h1><!--&oacute para acentos-->
+		</header>
+		<input id="identificador"/><br/><!--entradas br-> no tiene nodo hijo abre y cierra(salto de linea)-->
+		<form action = "#" method = "GET"><!--formulario Acción para enviar y el metodo get-->
+			Nombre: <input id="nombre" type= "text" size="20" maxlength="20" requerid ="true" /><br/><br/>
+			Apellidos: <input id="apellidos" type= "text" size="40"maxlength="40"/><br/><br/>
+			Edad: <input id="edad" type= "number" size="40"maxlength="40" min="10" max="60" placeholder="introduce la edad"/><br/><br/>
+			Contraseña: <input id="contraseña" type= "Password" size="40"maxlength="40"/><br/><br/>
+			Fecha: <input id="fecha" type= "datetime" size="40"maxlength="40"/><br/><br/>
+			Email: <input id="email" type= "email" size="40"maxlength="40"/><br/><br/>
+			Checkbox: <input id="checkbox" type= "checkbox" size="40"maxlength="40"/><br/><br/>
+			Color: <input id="color" type= "color" size="40"maxlength="40"/><br/><br/>
+			Hora: <input id="date_control2" type= "time" size="40"maxlength="40"/><br/><br/>
+			Codigo postal:<input id="codigopostal" type= "number" pattern="[0-9]{5} size="40"maxlength="40"/><br/><br/>
+			
+			<input type="button" value= "Pulsar"/>
+			<input type="submit" value= "Enviar" />
+		</form>
+		<script><!--siempre se crea dentro del body y al final. Podemos aplicar comillas dobles" o simples '-->
+			var variable ="Un valor de texto";
+			console.log("valor variable:" + variable);
+			if(typeof(otraVariable) === "undefined")
+				console.log("Otravarible SIN definir") ;
+			
+			variableGlobal ="Otro valor";
+			console.log("Otravarible SIN definir") ;
+			
+			var miNumero=200.5;
+			console.log("Mi numero es =" + miNumero);
+			miNumero= 1/0;
+			console.log("Mi numero es =" + miNumero);
+			if(! isNaN("hhh")){// si no NO es un número, si es un numero
+			miNumero= parseInt("fff");
+			console.log("Mi numero es =" + miNumero);
+			} else {
+				alert("no es un número!!");
+			}			
+		</script>
+	</body>
+</html>

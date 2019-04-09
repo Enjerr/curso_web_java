@@ -7,17 +7,17 @@ nav{
 	margin-right:20px;
 }
 header{
-				background-color: blue;
-				color: yellow;
+				background-color: #0000ff;/*blue, posible edición con programas o constructores*/
+				color: #ffff00;/*yellow*/
 				font-size: 26;
 			}
 h1, h2{
 	padding:10px;
 }
 .fondo-verde{
-background-color: green;
+background-color: #00ff00;/*green*/
 }
 #barra_lateral {
-	background-color: cyan;
+	background-color: #00ffff;/*cyan*/
 	float: right;
 }
