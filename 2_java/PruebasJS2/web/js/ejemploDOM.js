@@ -21,5 +21,9 @@ $("#marco").html(
 
 var arrayyLis = document.getElementsByClassName("unaClase");
 for (var i = 0; i < arrayLis.length;i++){
-    arrayLis.innerHTML += "-" + i + "!!";
+   arrayLis[ i ].innerHTML += "-" + i + "!!";
 }
+//con Jquery
+ $(".miClase").html("Cambiar valor");
+ 
+ 
