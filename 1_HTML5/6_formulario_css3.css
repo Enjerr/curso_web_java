@@ -1,0 +1,28 @@
+*{
+	margin: 0px;
+	padding: 0px;
+}
+.formulario{
+	margin-top:30px;
+	margin-left:40%;
+	margin-right:40%;
+	padding:10px;
+}
+.etiqueta,.campo, .bottom{
+	margin-top:5px;
+	width:200px;
+	display:block;
+}
+
+.boton{
+	margin:4px;
+	width:90px;
+}
+
+.bloque{
+	display: inline-block;
+	width:12em;
+	height:5em;
+	background-color: blue;
+	margin:5px;
+}
