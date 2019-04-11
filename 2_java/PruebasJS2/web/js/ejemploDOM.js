@@ -3,6 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+/* global arrayLis */
+
 //document.write("<h1>Titulo</h1>");
 //document.write("<input type='buton' id = 'boton' value = 'nada';
 var h1 = document.createElement("h1");
@@ -19,11 +21,30 @@ $("#marco").html(
         $("#marco").html()
         + "</br> Otro texto desde JQuery");
 
-var arrayyLis = document.getElementsByClassName("unaClase");
-for (var i = 0; i < arrayLis.length;i++){
-   arrayLis[ i ].innerHTML += "-" + i + "!!";
-}
+//var arrayyLis = document.getElementsByClassName("unaClase");
+//for (var i = 0; i < arrayLis.length;i++){
+ //  arrayLis[ i ].innerHTML += "-" + i + "!!";
+//}
+
 //con Jquery
- $(".miClase").html("Cambiar valor");
+// $(".miClase").html("Cambiar valor");
  
- 
+ //función recorrer lista
+var i=0;
+    $(".botonRecorrer").click(function () {
+        $(".unaClase").each(function () {
+            $(this).text('modificación: ' + i);
+           // $(".unaClase").append( "<li - </li> ");
+            i = i +1;
+        });
+        
+});
+ //función reiniciar lista
+
+    $(".botonReinicio").click(function () {
+        $(".unaClase").each(function () {
+            i = 0;
+        $(this).text('modificación: ' + i);
+        });
+        //i=0;
+});
