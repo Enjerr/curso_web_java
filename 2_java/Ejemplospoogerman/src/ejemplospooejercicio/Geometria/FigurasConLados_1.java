@@ -41,4 +41,14 @@ class FigurasConLados extends Figura {
     public void setBase(float base) {
         this.base = base;
     }
+    
+  
+    
+    //metodo to.string para convertir los objetos a string.
+    @Override
+    public String toString(){
+        return "Rectangulo: " + " , base= " + this.getBase()
+                    + ", altura= " + this.getAltura()
+                    + ", color= " + this.getColor();
+    }
 }

@@ -151,34 +151,12 @@ public class DesdeFicheros {
                 System.out.println("EJERCICIO FINAL");
 
                 System.out.println(linea);
+                
+                Rectangulo rec = new Rectangulo(0,0);
 
-                String[] cadena = linea.split(",");
+                String[] cadena = linea.split(",")[1].split(",");
+                
 
-                String[] num = new String[cadena.length];
-                ArrayList<String> numero = new ArrayList<>();
-
-                //System.out.println(cadena);
-                for (int i = 0; i < cadena.length; i++) {
-                    num = cadena[i].split(": ");
-                    numero.add(String.valueOf(num[0]));
-
-                    //System.out.println("--" + numero[i]);
-                }
-
-                for (int i = 0; i < numero.size(); i++) {
-                    System.out.println(numero.get(i));
-                    if (numero.get(i).contains("= ")) {
-                        String a = numero.get(i).trim();
-                        String[] b = a.split("= ");
-
-                        System.out.println("Valor actual" + b[i]);
-                    } else {
-                        String a = numero.get(i).trim();
-                        System.out.println("Valor actual" + a);
-                    }
-
-                    //System.out.println("--" + numero[i]);
-                }
             }
         } catch (Exception e) {
             e.printStackTrace();
