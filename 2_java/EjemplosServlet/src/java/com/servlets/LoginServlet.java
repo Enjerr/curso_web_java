@@ -6,19 +6,20 @@
 package com.servlets;
 
 import com.modelo.ServicioUsuarios;
+import com.sun.java.swing.plaf.windows.resources.windows;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Default
  */
-public class RegistroServlet extends HttpServlet {
-    
+public class LoginServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,52 +39,41 @@ public class RegistroServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Leyendo informacion RegistroServlet</title>");
-            out.println("<h1>Devolviendo sus datos: </h1>");
-            String nombre = request.getParameter("nom");
-            String password = request.getParameter("passwd");
-            String edad = request.getParameter("eda");
+            out.println("<title>Leyendo informacion LoginServlet</title>");
+            out.println("<h1>Devolviendo su información: </h1>");
             String email = request.getParameter("email");
+            String password = request.getParameter("passwd");
             boolean camposOk = true;
-            if (nombre.equals("")) {
-                camposOk = false;
-                out.println("<p style='background-color: red'> Rellene el nombre</p>");
-            } else {
-                out.println("<p>Tu nombre es: " + nombre + "</p>");
-            }
-            if (password.equals("")) {
-                camposOk = false;
-                out.println("<p style='background-color: red'> Introduce la contraseña</p>");
-            } else {
-                out.println("<p>Contraseña: " + password + "</p>");
-            }
-            if (edad.equals("")) {
-                camposOk = false;
-                out.println("<p style='background-color: red'> Rellene la edad</p>");
-            } else {
-                iEdad = Integer.parseInt(edad);
-                if (iEdad < 18) {
-                    camposOk = false;
-                    out.println("<p style='background-color: red'> Tienes menos de 18 </p>");
-                } else {
-                    out.println("<p>Tienes: " + edad + " años</p>");
-                }
-            }
             if (email.equals("")) {
                 camposOk = false;
                 out.println("<p style='background-color: red'> Rellene el email</p>");
-            } else {
-                out.println("<p>Tu email es: " + email + "</p>");
+            } 
+            
+            if (password.equals("")) {
+                camposOk = false;
+                out.println("<p style='background-color: red'> Introduce la contraseña</p>");
             }
-
+            ServicioUsuarios su = ServicioUsuarios.getInstancia();
+            if (camposOk) {
+                
+                if (su.validacionpasswd(email, password)){
+                    out.println( "<p style='background-color: yellow'> Login correcto</p>");
+                    out.println("<script type=\"text/javascript\">");
+                    out.println("alert(\" Login correcto\");");
+                    out.println("</script>");
+                    
+                }else {
+                    out.println("<p style='background-color: red'> Login erroneo</p>");
+                    out.println("<script type=\"text/javascript\">");
+                    out.println("alert(\" Login erroneo\");");
+                    out.println("</script>");
+                    response.sendRedirect("registro.html");
+                }
+            } 
+            
             out.println("</body>");
             out.println("</html>");
 
-            if (camposOk) {
-                ServicioUsuarios su = ServicioUsuarios.getInstancia();
-                su.addUsuario(nombre, password, iEdad, email);
-                out.println("<h2> Usuario añadido. Total= " + su.cantidadUsuarios() + "</h2>");
-            }
         }
     }
 
