@@ -5,6 +5,7 @@
  */
 package com.servlets;
 
+import com.modelo.ServicioUsuarios;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author Default
  */
 public class RegistroServlet extends HttpServlet {
+    ServicioUsuarios su ;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,6 +33,8 @@ public class RegistroServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            int iEdad = 0;
+
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -40,27 +44,33 @@ public class RegistroServlet extends HttpServlet {
             String password = request.getParameter("passwd");
             String edad = request.getParameter("eda");
             String email = request.getParameter("email");
+            boolean camposOk = true;
             if (nombre.equals("")) {
+                camposOk = false;
                 out.println("<p style='background-color: red'> Rellene el nombre</p>");
             } else {
                 out.println("<p>Tu nombre es: " + nombre + "</p>");
             }
             if (password.equals("")) {
+                camposOk = false;
                 out.println("<p style='background-color: red'> Introduce la contraseña</p>");
             } else {
                 out.println("<p>Contraseña: " + password + "</p>");
             }
             if (edad.equals("")) {
+                camposOk = false;
                 out.println("<p style='background-color: red'> Rellene la edad</p>");
             } else {
-                int iEdad = Integer.parseInt(edad);
+                iEdad = Integer.parseInt(edad);
                 if (iEdad < 18) {
+                    camposOk = false;
                     out.println("<p style='background-color: red'> Tienes menos de 18 </p>");
                 } else {
                     out.println("<p>Tienes: " + edad + " años</p>");
                 }
             }
             if (email.equals("")) {
+                camposOk = false;
                 out.println("<p style='background-color: red'> Rellene el email</p>");
             } else {
                 out.println("<p>Tu email es: " + email + "</p>");
@@ -68,6 +78,13 @@ public class RegistroServlet extends HttpServlet {
 
             out.println("</body>");
             out.println("</html>");
+
+            if (camposOk) {
+                if (this.su == null)
+                    this.su = new ServicioUsuarios();
+                this.su.addUsuario(nombre, password, iEdad, email);
+                out.println("<h2> Usuario añadido. Total= " + su.cantidadUsuarios() + "</h2>");
+            }
         }
     }
 
