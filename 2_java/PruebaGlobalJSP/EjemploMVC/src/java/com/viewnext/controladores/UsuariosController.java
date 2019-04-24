@@ -32,18 +32,43 @@ public class UsuariosController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            
+
+            String accion = request.getParameter("accion");
+            String eliminar = request.getParameter("eliminar");
+
             String nom = request.getParameter("nom");
             String email = request.getParameter("email");
             String edad = request.getParameter("eda");
             String passwd = request.getParameter("pass");
-            
-          boolean realizado = ServicioUsuarios.getInstancia().addUsuario(nom, passwd, edad, email  );
-          if(realizado){
-              out.println("<h3>  Registrado correctamente</h3>");
-          } else {
-              out.println("<h3> No se ha Registrado </h3>");
-          }
+
+            switch (accion) {
+                case "login":
+                    if (ServicioUsuarios.getInstancia().validacionPasswd(email, passwd)) {
+                        out.println("<h3>  Inicio de sesion correcto</h3>");
+                    } else {
+                        out.println("<h3>  Inicio de sesion incorrecto</h3>");
+                    }
+                    break;
+
+                case "registro":
+                    boolean realizado = ServicioUsuarios.getInstancia().addUsuario(nom, passwd, edad, email);
+
+                    if (realizado) {
+                        out.println("<h3>  Registrado correctamente</h3>");
+                    } else {
+                        out.println("<h3> No se ha Registrado </h3>");
+                    }
+                    break;
+                    case "eliminar":
+
+                    if (ServicioUsuarios.getInstancia().validacionPasswd(email, passwd)) {
+                        out.println("<h3>  eliminado correctamente</h3>");
+                    } else {
+                        out.println("<h3> No se ha eliminado </h3>");
+                    }
+            }
+        } catch (Exception ex){
+            System.out.println(">>>>> WARNING USUARIOS CONTROLLER");
         }
     }
 
