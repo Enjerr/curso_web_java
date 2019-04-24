@@ -35,7 +35,7 @@ public class ServicioUsuarios {
     //Codigo de la clase
     private ArrayList<Usuario> listaUsuarios;
 
-    public boolean addUsuario(String nom, String password, String edad, String email) {
+    public boolean addUsuario(String nom, String edad, String email, String password) {
         try {
             if (nom.equals("") || edad.equals("") || email.equals("") || password.equals("")) {
 
@@ -43,10 +43,14 @@ public class ServicioUsuarios {
                 
             } else {
                 int IEdad = Integer.parseInt(edad);
-                Usuario nuevoUsu = new Usuario(nom, password, IEdad, email);
-                this.listaUsuarios.add(nuevoUsu);
+                Usuario nuevoUsu = new Usuario(null, nom, IEdad, email, password);
+                //this.listaUsuarios.add(nuevoUsu);
                 bdUsu = new DerbyDBUsuario();
-                return bdUsu.anadir(nuevoUsu);
+                boolean creado= bdUsu.anadir(nuevoUsu);
+                listaUsuarios = bdUsu.listar();
+                
+                return listaUsuarios != null && creado;
+                
             }
 
             } catch (Exception ex){
@@ -64,7 +68,34 @@ public class ServicioUsuarios {
         }
         return false;
     }
+    
+    public Usuario obtenerUno(String email){
+        return this.bdUsu.ObtenerUno(email);
+    }
+ public boolean modificarUsuario(String id, String nom, String password, String edad, String email) {
+        try {
+            if (id.equals("")||nom.equals("") || edad.equals("") || email.equals("") || password.equals("")) {
 
+                return false;
+                
+            } else {
+                int IEdad = Integer.parseInt(edad);
+                int IId = Integer.parseInt(id);
+                Usuario nuevoUsu = new Usuario(IId ,nom, IEdad, email, password);
+                //this.listaUsuarios.add(nuevoUsu);
+                bdUsu = new DerbyDBUsuario();
+                boolean modificado= bdUsu.cambiarDatosDB(nuevoUsu);
+                listaUsuarios = bdUsu.listar();
+                
+                return listaUsuarios != null && modificado;
+                
+            }
+
+            } catch (Exception ex){
+            System.err.println(">>>>>>>ERROR: no se ha podido modificar usuario" + ex.getMessage());
+                    return false;
+        }
+     }
     public boolean cambiarDatos(Usuario usu) {
         int pos = 0;
         if (bdUsu.cambiarDatosDB(usu)) {
@@ -83,6 +114,28 @@ public class ServicioUsuarios {
             return false;
         }
     }
+    public boolean eliminar(String id){
+        try {
+            if (id.equals("")) {
+
+                return false;
+                
+            } else {
+                Integer IId = Integer.parseInt(id);
+                //this.listaUsuarios.add(nuevoUsu);
+                bdUsu = new DerbyDBUsuario();
+                boolean eliminado= bdUsu.eliminar(IId);
+                listaUsuarios = bdUsu.listar();
+                
+                return listaUsuarios != null && eliminado;
+                
+            }
+
+            } catch (Exception ex){
+            System.err.println(">>>>>>>ERROR: no se ha podido eliminar usuario" + ex.getMessage());
+                    return false;
+        }
+    }
 
     public int cantidadUsuarios() {
         return listaUsuarios.size();
@@ -92,11 +145,11 @@ public class ServicioUsuarios {
         return listaUsuarios;
     }
 
-    public boolean eliminarUsuarios(Usuario usu) {
+    /*public boolean eliminarUsuarios(Usuario usu) {
 
         return bdUsu.eliminar(usu);
 
-    }
+    }*/
 
     public ArrayList<Usuario> listar() {
         return this.listaUsuarios;

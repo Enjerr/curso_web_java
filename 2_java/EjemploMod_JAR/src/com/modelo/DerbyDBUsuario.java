@@ -2,6 +2,7 @@ package com.modelo;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -23,9 +24,32 @@ public class DerbyDBUsuario {
             Logger.getLogger(DerbyDBUsuario.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    public  Usuario ObtenerUno(String email){
+        try (Connection con = DriverManager.getConnection(Constantes.CONEX_DB, Constantes.USUARIO_DB, Constantes.PASSWORD_DB)) {
+            ArrayList<Usuario> usuarios = new ArrayList<>();
+            String consulta = "SELECT id, nombre, edad, email, password FROM usuario where email='" + email + "'";
+            
+            Statement sentencia = con.createStatement();
+            //sentencia.setString(1, email);
+            ResultSet res = sentencia.executeQuery(consulta);
+            Usuario usu = null;
+            if (res.next()) {
+                Integer id = res.getInt("id");
+                String nom = res.getString("nombre");
+                Integer edad = res.getInt("edad");
+                String password = res.getString("password");
+                usu = new Usuario(id, nom, edad, email, password);
+            }
+
+            return usu;
+        } catch (SQLException ex) {
+            System.err.println(">>>>>> " + ex.getMessage());
+            return null;
+        }
+    }
 
     public ArrayList<Usuario> listar() {
-        try (Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/UsuariosVNext", "administrador", "1234")) {
+        try (Connection con = DriverManager.getConnection(Constantes.CONEX_DB, Constantes.USUARIO_DB, Constantes.PASSWORD_DB)) {
             ArrayList<Usuario> usuarios = new ArrayList<>();
             String consulta = "SELECT id, nombre, edad, email, password FROM usuario";
             Statement sentencia = con.createStatement();
@@ -33,10 +57,11 @@ public class DerbyDBUsuario {
             while (res.next()) {
                 int id = res.getInt("id");
                 String nombre = res.getString("nombre");
+                int edad = res.getInt("edad");
                 String email = res.getString("email");
                 String password = res.getString("password");
-                int edad = res.getInt("edad");
-                Usuario usu = new Usuario(nombre, password, edad, email);
+                
+                Usuario usu = new Usuario(id, nombre, edad, email, password);
                 usuarios.add(usu);
             }
 
@@ -48,21 +73,18 @@ public class DerbyDBUsuario {
     }
 
     public boolean anadir(Usuario usu) {
-        try (Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/UsuariosVNext", "administrador", "1234")) {
-            String sqlId = "SELECT COUNT(id) AS ultId FROM usuario";
+        try (Connection con = DriverManager.getConnection(Constantes.CONEX_DB, Constantes.USUARIO_DB, Constantes.PASSWORD_DB)) {
 
-            Statement sentencia = con.createStatement();
-            ResultSet res = sentencia.executeQuery(sqlId);
 
-            if (res.next()) {
-                int ultId = res.getInt("ultId");
-                ultId++;
-                String insert = "INSERT INTO usuario (id, nombre, email, password, edad) "
-                        + "VALUES (" + ultId + ", '" + usu.getNombre() + "', '" + usu.getEmail() + "', '" + usu.getPassword() + "', " + usu.getEdad() + ")";
+            String insert = "INSERT INTO usuario ( nombre, edad, email, password) "
+                    + "VALUES (?,?,?,?)";
 
-                sentencia = con.createStatement();
-                sentencia.executeUpdate(insert);
-            }
+            PreparedStatement st = con.prepareStatement(insert);
+            st.setString(1, usu.getNombre());
+            st.setInt(2, usu.getEdad());
+            st.setString(3, usu.getEmail());
+            st.setString(4, usu.getPassword());
+            st.executeUpdate();
 
             return true;
         } catch (SQLException ex) {
@@ -72,53 +94,43 @@ public class DerbyDBUsuario {
     }
 
     public boolean cambiarDatosDB(Usuario usu) {
-        try (Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/UsuariosVNext", "administrador", "1234")) {
+        try (Connection con = DriverManager.getConnection(Constantes.CONEX_DB, Constantes.USUARIO_DB, Constantes.PASSWORD_DB)) {
 
-            String email = "SELECT email FROM usuario where email = '" + usu.getEmail() + "'";
 
-            Statement sentencia = con.createStatement();
-            ResultSet res = sentencia.executeQuery(email);
+            String insert = "INSERT USUARIO SET NOMBRE = ?, EDAD = ?, EMAIL = ?, PASSWORD = ? "
+                    + "WHERE id = ?";
 
-            if (res.next()) {
-                String update = "UPDATE usuario SET "
-                        + "password = '" + usu.getPassword() + "', edad = " + usu.getEdad() + ", nombre = '" + usu.getNombre() + "' "
-                        + "WHERE email = '" + usu.getEmail() + "'";
-                sentencia.executeUpdate(update);
-                return true;
-            } else {
-                return false;
-            }
+            PreparedStatement st = con.prepareStatement(insert);
+            st.setString(1, usu.getNombre());
+            st.setInt(2, usu.getEdad());
+            st.setString(3, usu.getEmail());
+            st.setString(4, usu.getPassword());
+            st.setInt(5, usu.getId());
+            st.executeUpdate();
+
+            return true;
         } catch (SQLException ex) {
             System.err.println(">>>>>> " + ex.getMessage());
             return false;
         }
     }
 
-    public boolean eliminar(Usuario persona) {
+    public boolean eliminar(int id) {
 
-        try (Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/UsuariosVNext", "administrador", "1234")) {
+        try (Connection con = DriverManager.getConnection(Constantes.CONEX_DB, Constantes.USUARIO_DB, Constantes.PASSWORD_DB)) {
 
-            String sqlID = "SELECT EMAIL, PASSWORD FROM Usuario WHERE EMAIL = '" + persona.getEmail() + "' AND PASSWORD = '" + persona.getPassword() + "'";
-            Statement s = con.createStatement();
-            ResultSet res = s.executeQuery(sqlID);
+            String insert = "DELETE FROM USUARIO WHEERE if = ? ";
 
-            if (res.next()) {
-                String sqlInsert = "DELETE FROM USUARIO WHERE EMAIL = '" + persona.getEmail() + "'";
+            PreparedStatement st = con.prepareStatement(insert);
 
-                System.out.println(" >>>>  Se ha Eliminado el usuario correctamente");
-                s = con.createStatement();
-                s.executeUpdate(sqlInsert);
-                return true;
-            } else {
-                return false;
+            st.setInt(1, id);
+            st.executeUpdate();
 
-            }
-
+            return true;
         } catch (SQLException ex) {
-            System.err.println(" >>>>> ERROR: al emilinar  " + ex.getMessage());
-
+            System.err.println(">>>>>> " + ex.getMessage());
+            return false;
         }
-        return false;
     }
 
 }

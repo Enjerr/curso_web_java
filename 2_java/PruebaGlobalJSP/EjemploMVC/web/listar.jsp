@@ -1,8 +1,4 @@
-<%-- 
-    Document   : listar
-    Created on : 23-abr-2019, 15:47:49
-    Author     : Default
---%>
+
 <%@include file="head.jsp" %>
 
 
@@ -27,6 +23,7 @@
 
         </thead>
         <tbody>
+            
             <%
                 for (Usuario usu : listaUsu) {
             %>

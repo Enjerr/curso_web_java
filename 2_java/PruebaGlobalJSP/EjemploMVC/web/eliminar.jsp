@@ -9,7 +9,7 @@
         
         <%@include file = "header.jsp" %>
         <h2>Registro</h2>
-        <form name="form1" method="get" action="./usuarios.do">
+        <form name="form1" method="post" action="./usuarios.do">
             <table border="1">
                  <tr><td>E-mail:</td><td>
                         <input type="email" name="email" id="email" size="100" required="required" value="email@valido.com"/></td></tr>

@@ -8,7 +8,7 @@
     <body>
         
         <%@include file = "header.jsp" %>
-        <h2>Registro</h2>
+        <h2>Login</h2>
         <form name="form1" method="post" action="./usuarios.do">
             <table border="1">
                  <tr><td>E-mail:</td><td>

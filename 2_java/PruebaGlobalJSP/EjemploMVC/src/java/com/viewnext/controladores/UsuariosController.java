@@ -6,12 +6,14 @@
 package com.viewnext.controladores;
 
 import com.modelo.ServicioUsuarios;
+import com.modelo.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -34,7 +36,6 @@ public class UsuariosController extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
 
             String accion = request.getParameter("accion");
-            String eliminar = request.getParameter("eliminar");
 
             String nom = request.getParameter("nom");
             String email = request.getParameter("email");
@@ -44,28 +45,41 @@ public class UsuariosController extends HttpServlet {
             switch (accion) {
                 case "login":
                     if (ServicioUsuarios.getInstancia().validacionPasswd(email, passwd)) {
-                        out.println("<h3>  Inicio de sesion correcto</h3>");
+                        //out.println("<h3>  Inicio de sesion correcto</h3>");
+                        
+                        HttpSession sesion = request.getSession();
+                        //MODIFICADO
+                        Usuario usu = ServicioUsuarios.getInstancia().obtenerUno(email);
+                        sesion.setAttribute("usuario", usu);
+                        request.getRequestDispatcher("index.jsp").forward(request, response);
+                        
                     } else {
                         out.println("<h3>  Inicio de sesion incorrecto</h3>");
                     }
                     break;
 
                 case "registro":
-                    boolean realizado = ServicioUsuarios.getInstancia().addUsuario(nom, passwd, edad, email);
 
-                    if (realizado) {
+                    if (ServicioUsuarios.getInstancia().addUsuario(nom, edad, email, passwd)) {
                         out.println("<h3>  Registrado correctamente</h3>");
                     } else {
                         out.println("<h3> No se ha Registrado </h3>");
                     }
                     break;
+                    /*case "listar":
+
+                    if (ServicioUsuarios.getInstancia().getListaUsuarios(nom, edad, email, passwd)) {
+                        out.println("<h3>  listado correctamente</h3>");
+                    } else {
+                        out.println("<h3> No se ha listado </h3>");
+                    }break;*/
                     case "eliminar":
 
-                    if (ServicioUsuarios.getInstancia().validacionPasswd(email, passwd)) {
+                    if (ServicioUsuarios.getInstancia().eliminar(null)) {
                         out.println("<h3>  eliminado correctamente</h3>");
                     } else {
                         out.println("<h3> No se ha eliminado </h3>");
-                    }
+                    }break;
             }
         } catch (Exception ex){
             System.out.println(">>>>> WARNING USUARIOS CONTROLLER");
