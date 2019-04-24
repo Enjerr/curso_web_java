@@ -29,7 +29,7 @@
                                size="4"  value="<%= usu.getEdad()%>"/>
                         <input id="email" name="email" type="text" 
                                size="4"  value="<%= usu.getEmail()%>"/>
-                        <input id="passwd" name="passwd" type="text" 
+                        <input id="pass" name="pass" type="text" 
                                size="4"  value="<%= usu.getPassword()%>"/>
                         
                         <input class="metodo" id="accion" name="accion"   readonly="true" value="***"/>
