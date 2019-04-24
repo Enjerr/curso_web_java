@@ -3,22 +3,27 @@
 <head>
 <h1>Página principal Aplicacion serlests</h1>
 </head>
-    <nav>
-        <a href  ="index.jsp">Inicio </a>
+<nav>
+    <a href  ="index.jsp">Inicio </a>
     <c:catch var = "exception">
         <jsp:useBean id = "usuario" type = "com.modelo.Usuario" scope="session">
-                   <jsp:getProperty property = "*" name="usuario"/>
-                   <jsp:getProperty property = "id" name="usuario"/>
-                   <jsp:getProperty property = "email" name="usuario"/>
-            
+            <jsp:getProperty property = "*" name="usuario"/>
+            <jsp:getProperty property = "id" name="usuario"/>
+            <jsp:getProperty property = "email" name="usuario"/>
+
         </jsp:useBean>
         <a href="listar.jsp">listado</a>
         <a href="eliminar.jsp">Eliminar</a>
     </c:catch>
-        <c:if test="${not empty exception}">
+    <c:if test="${not empty exception}">
 
         <a href="login.jsp"> login</a>
         <a href="registro.jsp"> registro</a>
-        </c:if>
-    </nav>
+    </c:if>
+</nav>
+<c:if test = "${sessionScope.msj_error != null}">
+    <h3 style="color: red"> ${sessionScope.msj_error}</h3>
+    <c:remove var="msj_error" scope="session"/>
+    <!-- lo mismo que : request.getSession().removeAtributte("msj_error"); -->
+</c:if>
 

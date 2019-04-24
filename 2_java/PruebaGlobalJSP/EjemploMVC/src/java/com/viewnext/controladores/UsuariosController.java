@@ -36,7 +36,7 @@ public class UsuariosController extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
 
             String accion = request.getParameter("accion");
-
+            String id = request.getParameter("id");
             String nom = request.getParameter("nom");
             String email = request.getParameter("email");
             String edad = request.getParameter("eda");
@@ -51,11 +51,13 @@ public class UsuariosController extends HttpServlet {
                         //MODIFICADO
                         Usuario usu = ServicioUsuarios.getInstancia().obtenerUno(email);
                         sesion.setAttribute("usuario", usu);
-                        request.getRequestDispatcher("index.jsp").forward(request, response);
+                       
                         
                     } else {
-                        out.println("<h3>  Inicio de sesion incorrecto</h3>");
+                        System.out.println("<h3>  Inicio de sesion incorrecto</h3>");
+                        request.getSession().setAttribute("msj_error", "Login incorrecto");
                     }
+                    request.getRequestDispatcher("index.jsp").forward(request, response);
                     break;
 
                 case "registro":
@@ -66,13 +68,11 @@ public class UsuariosController extends HttpServlet {
                         out.println("<h3> No se ha Registrado </h3>");
                     }
                     break;
-                    /*case "listar":
+                    case "PUT"://modificar
 
-                    if (ServicioUsuarios.getInstancia().getListaUsuarios(nom, edad, email, passwd)) {
-                        out.println("<h3>  listado correctamente</h3>");
-                    } else {
-                        out.println("<h3> No se ha listado </h3>");
-                    }break;*/
+                    ServicioUsuarios.getInstancia().modificarUsuario(id, nom, edad, email, passwd);
+                    request.getRequestDispatcher("listar.jsp").forward(request, response);
+                            break;
                     case "eliminar":
 
                     if (ServicioUsuarios.getInstancia().eliminar(null)) {
