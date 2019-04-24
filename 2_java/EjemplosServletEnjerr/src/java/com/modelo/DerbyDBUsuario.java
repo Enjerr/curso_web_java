@@ -78,4 +78,29 @@ public class DerbyDBUsuario {
            return false;
         }
     }
+    
+       public ArrayList<Usuario> listados(){
+        try(Connection con = DriverManager.getConnection(
+            "jdbc:derby://localhost:1527/UsuariosVNext", "administrador", "1234")){
+            ArrayList<Usuario> ListaUsu = new ArrayList<>();
+            String consultaSQL = "SELECT id, nombre, edad, email, password FROM Usuario";
+            Statement sentencia = con.createStatement();
+            ResultSet res = sentencia.executeQuery(consultaSQL);
+            while (res.next()){
+                int id = res.getInt("id");
+                String nombre = res.getString("nombre");
+                String password = res.getString("password");
+                int edad = res.getInt("edad");
+                String email = res.getString("email");
+                Usuario usu = new Usuario(nombre, password, edad, email);
+                ListaUsu.add(usu);
+                
+            }
+            return ListaUsu;
+        } catch (SQLException ex) {
+           System.err.println(">>>" + ex.getMessage());
+           return null;
+        }
+    }
+    
 }
